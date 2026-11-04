@@ -249,6 +249,7 @@ grant select, update, delete on public.enquiries to authenticated;
 grant select, insert, update, delete on public.products to authenticated;
 grant update on public.orders to authenticated;
 grant usage, select on sequence public.order_number_seq to authenticated;
+revoke execute on function public.create_customer_order(text,text,text,text,text,text,text,text,jsonb) from public, anon;
 grant execute on function public.create_customer_order(text,text,text,text,text,text,text,text,jsonb) to authenticated;
 grant execute on function public.is_admin() to anon, authenticated;
 
