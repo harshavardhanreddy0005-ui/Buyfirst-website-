@@ -153,9 +153,9 @@ create or replace function public.create_customer_order(
 )
 returns jsonb
 language plpgsql
-security invoker
+security definer
 set search_path = ''
-as $$
+as $
 declare
   v_uid uuid := auth.uid();
   v_order_id uuid := gen_random_uuid();
