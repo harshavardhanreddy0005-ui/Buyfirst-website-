@@ -287,10 +287,10 @@ wat=o=>'🛒 *New buyfirst order '+o.id+'*\n'+new Date(o.at).toLocaleString('en-
 waurl=o=>'https://wa.me/91'+DB.g('wa','6304389144')+'?text='+encodeURIComponent(wat(o)),
 wam=o=>`<p><a class=btn style="background:#25d366;box-shadow:none" target=_blank rel=noopener href="${waurl(o)}">📲 Send order to the seller on WhatsApp</a></p><p class=mu>Tap, then press Send in WhatsApp so the seller gets your order details instantly.</p>`,
 payok=id=>{const o=S.o.find(o=>o.id==id);if(miss(o).length)return tt('Attach the e-book file first (E-books → ✏️), then approve');o.paid=1;sv();main();tt('Payment confirmed — downloads unlocked')},
-upd=async(id,k,x)=>{const p=S.p.find(p=>p.id==id);if(!p)return;p[k]=+x;try{await window.BuyfirstSupabase.saveProduct({id:p.id,title:p.title,description:p.desc,category:p.cat,image_url:p.img,images:IM(p).filter(u=>/^https?:\\/\\//.test(u)),cost_price:p.cost,selling_price:p.price,mrp:p.mrp,stock:p.stock,dispatch_days:p.disp,tags:p.tags.split(',').map(z=>z.trim()).filter(Boolean),variants:p.vars,is_digital:!!p.digital,digital_file_path:p.digital_file_path,is_active:p.live!==0,sku:p.sku})}catch(err){tt(err.message||'Update failed')}main()},setSt=(id,s)=>{S.o.find(o=>o.id==id).status=s;sv();main();tt('Status → '+s)},pform=(id,ty)=>{PF.imgs=id?[...IM(S.p.find(p=>p.id==id)||{})]:[];PF.nf={};PF.file=null;S.m={t:'prod',id,ty};ov()},
+upd=async(id,k,x)=>{const p=S.p.find(p=>p.id==id);if(!p)return;p[k]=+x;try{await window.BuyfirstSupabase.saveProduct({id:p.id,title:p.title,description:p.desc,category:p.cat,image_url:p.img,images:IM(p).filter(u=>/^https?:\/\//.test(u)),cost_price:p.cost,selling_price:p.price,mrp:p.mrp,stock:p.stock,dispatch_days:p.disp,tags:p.tags.split(',').map(z=>z.trim()).filter(Boolean),variants:p.vars,is_digital:!!p.digital,digital_file_path:p.digital_file_path,is_active:p.live!==0,sku:p.sku})}catch(err){tt(err.message||'Update failed')}main()},setSt=(id,s)=>{S.o.find(o=>o.id==id).status=s;sv();main();tt('Status → '+s)},pform=(id,ty)=>{PF.imgs=id?[...IM(S.p.find(p=>p.id==id)||{})]:[];PF.nf={};PF.file=null;S.m={t:'prod',id,ty};ov()},
 pdel=async id=>{if(!confirm('Delete this product from Supabase?'))return;try{await window.BuyfirstSupabase.deleteProduct(id);S.p=S.p.filter(p=>p.id!=id);S.c=S.c.filter(c=>c.id!=id);draw();tt('Product deleted from Supabase')}catch(err){tt(err.message||'Delete failed')}};
 async function psave(id){
- const old=S.p.find(p=>p.id==id),L=[...PF.imgs,...(/^https?:\\/\\//.test(v('f4'))&&!PF.imgs.includes(v('f4'))?[v('f4')]:[])].slice(0,8),eb=v('f0')=='ebook';
+ const old=S.p.find(p=>p.id==id),L=[...PF.imgs,...(/^https?:\/\//.test(v('f4'))&&!PF.imgs.includes(v('f4'))?[v('f4')]:[])].slice(0,8),eb=v('f0')=='ebook';
  const o={title:v('f1'),desc:v('f2'),cat:v('f3')||(eb?'Digital':'General'),cost:+v('f5')||0,price:+v('f6'),mrp:+v('f7')||+v('f6'),stock:eb?999:+v('f8')||0,disp:eb?0:+v('fj')||3,tags:v('f9'),vars:eb?[]:v('fa').split(',').map(z=>z.trim()).filter(Boolean),sku:v('fc'),digital:eb?1:0,live:$('fm').checked?1:0};
  if(!o.title||!(o.price>0))return tt('Title and selling price are required');
  if(!eb&&v('f8')==='')return tt('Enter the stock quantity');
@@ -299,7 +299,7 @@ async function psave(id){
   const imgs=[];
   for(const x of L){
    if(x.startsWith('n:')){const raw=(PF.nf[x.slice(2)]||{}).prev;if(!raw)continue;const blob=await (await fetch(raw)).blob();const file=new File([blob],'product-'+Date.now()+'.jpg',{type:blob.type||'image/jpeg'});const uploaded=await window.BuyfirstSupabase.uploadProductImage(file);imgs.push(uploaded.url)}
-   else if(/^https?:\\/\\//.test(x))imgs.push(x);
+   else if(/^https?:\/\//.test(x))imgs.push(x);
   }
   const payload={title:o.title,description:v('f2'),category:o.cat,image_url:imgs[0]||null,images:imgs,cost_price:o.cost,selling_price:o.price,mrp:o.mrp,stock:o.stock,dispatch_days:o.disp,tags:o.tags.split(',').map(z=>z.trim()).filter(Boolean),variants:o.vars,is_digital:!!o.digital,digital_file_path:old?.digital_file_path||null,is_active:o.live!==0,sku:o.sku||null};
   const saved=await window.BuyfirstSupabase.saveProduct({...payload,...(id?{id}:{})});
