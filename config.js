@@ -9,6 +9,6 @@
      this repository.
 --------------------------------------------------------------------- */
 window.BUYFIRST_CONFIG = {
-  SUPABASE_URL: 'https://nvxsxuilagbfrsppzzco.supabase.co',
+  SUPABASE_URL: 'https://nvxsxuilagbfrsppzzco.supabase.co/rest/v1/',
   SUPABASE_ANON_KEY: 'sb_publishable_8-BmMOHB31A8K9XRyZ1ltA_Yq-jzq96'
 };
